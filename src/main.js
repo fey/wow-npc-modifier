@@ -4,8 +4,8 @@ import './style.css'
 import creatureClasslevelstatsData from '../creature_classlevelstats.json'
 
 const expansionsEnum = {
-  vanilla: 'vanilla',
-  tbc: 'tbc',
+  vanilla: 0,
+  tbc: 1,
 };
 
 /** @type {HTMLFormElement} form */
@@ -76,7 +76,7 @@ form.addEventListener('submit', (e) => {
   const level = Number(formData.get('level'))
   const classNumber = Number(formData.get('classNumber'))
   const targetHealth = Number(formData.get('targetHealth'))
-  const expansion = formData.get('expansion')
+  const expansion = formData.has('expansion') ? Number(formData.get('expansion')) : undefined
 
   try {
     const expansions = Object.values(expansionsEnum);
