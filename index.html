@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <section>
+    <h2>Инструкция</h2>
+    <ol>
+      <li>Перейти на <a href="https://www.wowhead.com/">WoWHead</a> и найти страницу нужного NPC</li>
+      <li>Скопировать из адресной строки ID непися.</li>
+      <li>Выбрать уровень, класс, моба, желаемое количество HP</li>
+      <li>Нажать "Отправить"</li>
+      <li>Скопировать запрос.</li>
+    </ol>
+  </section>
+  <form id="mod-form">
+    <label for="">
+      Entry
+    <input required type="number" name="entryId" id="entry">
+    </label>
+    <br>
+
+    <label for="level">
+      level
+    <input required type="number" name="level" id="level" min="1" max="75">
+    </label>
+    <br>
+
+    <label for="class">class
+      <select required name="classNumber" id="class">
+        <option value="1">Warrior</option>
+        <option value="2">Paladin</option>
+        <!-- <option value="3">Hunter</option> -->
+        <!-- <option value="4">Rogue</option> -->
+        <!-- <option value="5">Priest</option> -->
+        <!-- <option value="7">Shaman</option> -->
+        <option value="8">Mage</option>
+        <!-- <option value="9">Warlock</option> -->
+        <!-- <option value="11">Druid</option> -->
+      </select>
+    </label>
+    <br>
+    <label for="desired_hp">Desired hp
+    <input type="number" name="targetHealth">
+    </label>
+    <br>
+    <input type="submit" value="Submit">
+    <input type="reset" value="Reset">
+  </form>
+  <pre>
+    <code id="output">
+UPDATE creature_template
+SET HealthModifier = 5.0505
+WHERE entry = @тут_айди_моба_с_вовхеда;
+    </code>
+  </pre>
+    <!-- <div id="app"></div> -->
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
