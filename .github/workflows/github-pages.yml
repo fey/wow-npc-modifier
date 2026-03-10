@@ -37,6 +37,9 @@ jobs:
       - name: Install dependencies
         run: make install
 
+      - name: Lint project
+        run: make lint
+
       - name: Build project
         run: make build
 

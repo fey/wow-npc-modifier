@@ -20,6 +20,7 @@ See [Makefile](./Makefile)
 
 ```bash
 make install
+make lint
 make start
 ```
 

@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite';
-import { viteSingleFile } from "vite-plugin-singlefile";
+import { viteSingleFile } from 'vite-plugin-singlefile';
 
 export default defineConfig({
   plugins: [viteSingleFile()],
-  base: "/wow-npc-modifier",
+  base: '/wow-npc-modifier',
   build: {
     rollupOptions: {
       output: {
@@ -12,4 +12,4 @@ export default defineConfig({
       },
     },
   },
-})
+});
