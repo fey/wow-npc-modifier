@@ -1,63 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>NPC Modifier</title>
 </head>
+
 <body>
-  <section>
-    <h2>Инструкция</h2>
-    <ol>
-      <li>Перейти на <a href="https://www.wowhead.com/">WoWHead</a> и найти страницу нужного NPC</li>
-      <li>Скопировать из адресной строки ID непися.</li>
-      <li>Выбрать уровень, класс, моба, желаемое количество HP</li>
-      <li>Нажать "Отправить"</li>
-      <li>Скопировать запрос.</li>
-    </ol>
-  </section>
-  <form id="mod-form">
-    <label for="">
-      Entry
-    <input required type="number" name="entryId" id="entry">
-    </label>
-    <br>
+  <div class="layout">
 
-    <label for="level">
-      level
-    <input required type="number" name="level" id="level" min="1" max="75">
-    </label>
-    <br>
+    <section>
+      <h2>Инструкция</h2>
+      <ol>
+        <li>Перейти на <a href="https://www.wowhead.com/" target="_blank">WoWHead</a> и найти страницу NPC</li>
+        <li>Скопировать ID из адресной строки</li>
+        <li>Выбрать уровень, класс, моба, желаемое HP</li>
+        <li>Нажать "Submit"</li>
+        <li>Скопировать SQL запрос</li>
+      </ol>
+    </section>
 
-    <label for="class">class
-      <select required name="classNumber" id="class">
-        <option value="1">Warrior</option>
-        <option value="2">Paladin</option>
-        <!-- <option value="3">Hunter</option> -->
-        <!-- <option value="4">Rogue</option> -->
-        <!-- <option value="5">Priest</option> -->
-        <!-- <option value="7">Shaman</option> -->
-        <option value="8">Mage</option>
-        <!-- <option value="9">Warlock</option> -->
-        <!-- <option value="11">Druid</option> -->
-      </select>
-    </label>
-    <br>
-    <label for="desired_hp">Desired hp
-    <input type="number" name="targetHealth">
-    </label>
-    <br>
-    <input type="submit" value="Submit">
-    <input type="reset" value="Reset">
-  </form>
-  <pre>
-    <code id="output">
-UPDATE creature_template
+    <form id="mod-form">
+      <label>
+        Entry
+        <input required type="number" name="entryId" id="entry">
+      </label>
+
+      <label>
+        Level
+        <input required type="number" name="level" id="level" min="1" max="75">
+      </label>
+
+      <label>
+        Class
+        <select required name="classNumber" id="class">
+          <option value="1">Warrior</option>
+          <option value="2">Paladin</option>
+          <option value="8">Mage</option>
+        </select>
+      </label>
+      <label>
+        Desired HP
+        <input type="number" name="targetHealth">
+      </label>
+      <div class="buttons">
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+      </div>
+    </form>
+    <div class="output">
+      <button id="copyButton" class="copy-button">Copy</button>
+      <pre><code id="output">UPDATE creature_template
 SET HealthModifier = 5.0505
-WHERE entry = @тут_айди_моба_с_вовхеда;
-    </code>
-  </pre>
-    <!-- <div id="app"></div> -->
-    <script type="module" src="/src/main.js"></script>
+WHERE entry = @тут_айди_моба_с_вовхеда;</code>
+</pre>
+    </div>
+  </div>
+  <!-- <div id="app"></div> -->
+  <script type="module" src="/src/main.js"></script>
 </body>
+
 </html>

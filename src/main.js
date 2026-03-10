@@ -6,14 +6,31 @@ import creatureClasslevelstatsData from '../creature_classlevelstats.json'
 /** @type {HTMLFormElement} form */
 // @ts-ignore
 const form = document.getElementById('mod-form')
+const code = document.getElementById("output");
+const copyButton = document.getElementById("copyButton");
 
-const outputElement = document.getElementById('output')
+const buildUpdateCreatureTemplateQuery = (
+  entryId,
+  level,
+  classNumber,
+  baseHealth,
+  targtetHealth,
+  healthModifier
+) => {
+  const comments = Object.entries({
+    entryId,
+    level,
+    classNumber,
+    baseHealth,
+    targtetHealth,
+    healthModifier,
+  })
+    .map(([key, value]) => `--${key}: ${value}`)
 
-const buildUpdateCreatureTemplateQuery = (healthModifier, entryId) => {
-  return `UPDATE creature_template SET HealthModifier = ${healthModifier} WHERE entry = ${entryId};`;
+  return `${comments.join('\n')}\n\nUPDATE creature_template\nSET HealthModifier = ${healthModifier}\nWHERE entry = ${entryId};`;
 }
 
-const findCreatureStats = (
+const findBaseHealth = (
   /** @type Array */ rows,
   /** @type Number */ level,
   /** @type Number */ creatureClassNumber
@@ -23,16 +40,17 @@ const findCreatureStats = (
   });
 
   if (creatureStat) {
-    return creatureStat
-
+    // console.log(creatureStat)
+    return creatureStat.basehp1
   }
 
   const serializedParams = JSON.stringify({ level, class: creatureClassNumber })
   throw Error(`'Cannont find in creature stats with params: ${serializedParams}'`)
 }
 
-const calculateHealthModifier = (baseHp, targetHp) => {
-  return Number(targetHp / baseHp).toFixed(4);
+const calculateHealthModifier = (baseHealth, targetHealth) => {
+  // console.log({baseHealth, targetHealth})
+  return Number(targetHealth / baseHealth).toFixed(4);
 }
 
 form.addEventListener('submit', (e) => {
@@ -46,34 +64,29 @@ form.addEventListener('submit', (e) => {
   const targetHealth = Number(formData.get('targetHealth'))
 
   try {
-    const creatureStat = findCreatureStats(creatureClasslevelstatsData, level, classNumber)
-    const healthModifier = calculateHealthModifier(creatureStat.basehp1, targetHealth)
-    const query = buildUpdateCreatureTemplateQuery(healthModifier, entryId)
-    outputElement.innerText = query
+    const baseHealth = findBaseHealth(creatureClasslevelstatsData, level, classNumber)
+    const healthModifier = calculateHealthModifier(baseHealth, targetHealth)
+    const query = buildUpdateCreatureTemplateQuery(
+      entryId,
+      level,
+      classNumber,
+      baseHealth,
+      targetHealth,
+      healthModifier
+    );
+
+    code.innerText = query
   }
   catch (e) {
-    outputElement.innerText = e
+    code.innerText = e
   }
 })
 
+copyButton.addEventListener("click", async () => {
+  await navigator.clipboard.writeText(code.textContent);
 
-
-// document.querySelector('#app').innerHTML = `
-//   <div>
-//     <a href="https://vite.dev" target="_blank">
-//       <img src="${viteLogo}" class="logo" alt="Vite logo" />
-//     </a>
-//     <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-//       <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-//     </a>
-//     <h1>Hello Vite!</h1>
-//     <div class="card">
-//       <button id="counter" type="button"></button>
-//     </div>
-//     <p class="read-the-docs">
-//       Click on the Vite logo to learn more
-//     </p>
-//   </div>
-// `
-
-// setupCounter(document.querySelector('#counter'))
+  copyButton.textContent = "Copied";
+  setTimeout(() => {
+    copyButton.textContent = "Copy";
+  }, 1500);
+});
