@@ -3,6 +3,11 @@
 import './style.css'
 import creatureClasslevelstatsData from '../creature_classlevelstats.json'
 
+const expansionsEnum = {
+  vanilla: 'vanilla',
+  tbc: 'tbc',
+};
+
 /** @type {HTMLFormElement} form */
 // @ts-ignore
 const form = document.getElementById('mod-form')
@@ -15,16 +20,18 @@ const buildUpdateCreatureTemplateQuery = (
   level,
   classNumber,
   baseHealth,
-  targtetHealth,
-  healthModifier
+  targetHealth,
+  healthModifier,
+  expansion,
 ) => {
   const comments = Object.entries({
     entryId,
     level,
     classNumber,
     baseHealth,
-    targtetHealth,
+    targetHealth,
     healthModifier,
+    expansion
   })
     .map(([key, value]) => `--${key}: ${value}`)
 
@@ -34,24 +41,30 @@ const buildUpdateCreatureTemplateQuery = (
 const findBaseHealth = (
   /** @type Array */ rows,
   /** @type Number */ level,
-  /** @type Number */ creatureClassNumber
+  /** @type Number */ creatureClassNumber,
+  expansion,
 ) => {
   const creatureStat = rows.find(row => {
     return row.level === level && row.class === creatureClassNumber
   });
 
-  if (creatureStat) {
-    // console.log(creatureStat)
+  if (!creatureStat) {
+    const serializedParams = JSON.stringify({ level, class: creatureClassNumber })
+    throw Error(`'Cannont find in creature stats with params: ${serializedParams}'`)
+  }
+
+  if (expansion === expansionsEnum.vanilla) {
+    return creatureStat.basehp0
+  } else if (expansion === expansionsEnum.tbc) {
     return creatureStat.basehp1
   }
 
-  const serializedParams = JSON.stringify({ level, class: creatureClassNumber })
-  throw Error(`'Cannont find in creature stats with params: ${serializedParams}'`)
+  throw Error(`Invalid expansion. Given: ${expansion}`)
 }
 
 const calculateHealthModifier = (baseHealth, targetHealth) => {
   // console.log({baseHealth, targetHealth})
-  return Number(targetHealth / baseHealth).toFixed(4);
+  return targetHealth / baseHealth;
 }
 
 form.addEventListener('submit', (e) => {
@@ -63,9 +76,16 @@ form.addEventListener('submit', (e) => {
   const level = Number(formData.get('level'))
   const classNumber = Number(formData.get('classNumber'))
   const targetHealth = Number(formData.get('targetHealth'))
+  const expansion = formData.get('expansion')
 
   try {
-    const baseHealth = findBaseHealth(creatureClasslevelstatsData, level, classNumber)
+    const expansions = Object.values(expansionsEnum);
+    if (!expansions.includes(expansion)) {
+      throw Error(`Invalid expansion. Only supported: ${expansions.join(', ')}. Given: ${expansion}`)
+    }
+
+    const baseHealth = findBaseHealth(creatureClasslevelstatsData, level, classNumber, expansion)
+
     const healthModifier = calculateHealthModifier(baseHealth, targetHealth)
     sql = buildUpdateCreatureTemplateQuery(
       entryId,
@@ -73,7 +93,8 @@ form.addEventListener('submit', (e) => {
       classNumber,
       baseHealth,
       targetHealth,
-      healthModifier
+      healthModifier,
+      expansion,
     );
 
     code.innerText = sql

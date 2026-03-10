@@ -15,7 +15,7 @@
       <ol>
         <li>Перейти на <a href="https://www.wowhead.com/" target="_blank">WoWHead</a> и найти страницу NPC</li>
         <li>Скопировать ID из адресной строки</li>
-        <li>Выбрать уровень, класс, моба, желаемое HP</li>
+        <li>Выбрать уровень, класс, моба, желаемое HP, дополнение</li>
         <li>Нажать "Submit"</li>
         <li>Скопировать SQL запрос</li>
       </ol>
@@ -38,6 +38,13 @@
           <option value="1">Warrior</option>
           <option value="2">Paladin</option>
           <option value="8">Mage</option>
+        </select>
+      </label>
+      <label>
+        Expansion
+        <select required name="expansion" id="expansion">
+          <option value="vanilla">Vanilla</option>
+          <option value="tbc" selected>The Burning Crusade</option>
         </select>
       </label>
       <label>
