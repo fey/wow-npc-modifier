@@ -9,7 +9,7 @@ const expansionsEnum = {
 };
 
 /** @type {HTMLFormElement} form */
-// @ts-ignore
+// @ts-expect-error
 const form = document.getElementById('mod-form')
 const code = document.getElementById("output");
 const copyButton = document.getElementById("copyButton");
@@ -46,7 +46,7 @@ const findBaseHealth = (
 ) => {
   const creatureStat = rows.find(row => {
     return row.level === level && row.class === creatureClassNumber
-  });
+  })
 
   if (!creatureStat) {
     const serializedParams = JSON.stringify({ level, class: creatureClassNumber })
