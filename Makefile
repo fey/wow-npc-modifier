@@ -7,6 +7,12 @@ build:
 lint:
 	npm run lint
 
+test:
+	npm run test:run
+
+test-watch:
+	npm run test:watch
+
 start:
 	npm run dev
 

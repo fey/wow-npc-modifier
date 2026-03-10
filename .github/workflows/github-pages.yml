@@ -40,6 +40,9 @@ jobs:
       - name: Lint project
         run: make lint
 
+      - name: Run tests
+        run: make test
+
       - name: Build project
         run: make build
 

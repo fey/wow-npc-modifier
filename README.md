@@ -21,6 +21,7 @@ See [Makefile](./Makefile)
 ```bash
 make install
 make lint
+make test
 make start
 ```
 
