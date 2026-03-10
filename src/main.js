@@ -8,6 +8,7 @@ import creatureClasslevelstatsData from '../creature_classlevelstats.json'
 const form = document.getElementById('mod-form')
 const code = document.getElementById("output");
 const copyButton = document.getElementById("copyButton");
+let sql = '';
 
 const buildUpdateCreatureTemplateQuery = (
   entryId,
@@ -66,7 +67,7 @@ form.addEventListener('submit', (e) => {
   try {
     const baseHealth = findBaseHealth(creatureClasslevelstatsData, level, classNumber)
     const healthModifier = calculateHealthModifier(baseHealth, targetHealth)
-    const query = buildUpdateCreatureTemplateQuery(
+    sql = buildUpdateCreatureTemplateQuery(
       entryId,
       level,
       classNumber,
@@ -75,7 +76,7 @@ form.addEventListener('submit', (e) => {
       healthModifier
     );
 
-    code.innerText = query
+    code.innerText = sql
   }
   catch (e) {
     code.innerText = e
@@ -83,7 +84,7 @@ form.addEventListener('submit', (e) => {
 })
 
 copyButton.addEventListener("click", async () => {
-  await navigator.clipboard.writeText(code.textContent);
+  await navigator.clipboard.writeText(sql);
 
   copyButton.textContent = "Copied";
   setTimeout(() => {
